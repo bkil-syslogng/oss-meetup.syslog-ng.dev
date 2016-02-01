@@ -271,7 +271,8 @@ log { source(local-tls);
 ```
 $prefix/sbin/syslog-ng --foreground \
  --cfgfile ~/syslog-ng.tls-sigsegv.conf
-
+```
+```
 nc -zvv localhost 2222
 ```
 
@@ -283,7 +284,7 @@ nc -zvv localhost 2222
 				<section data-markdown style="text-align: left;"> <script type="text/template">
 #### Mi az a "core dump"?
 
-Néhány signal hatására a folyamat alapértelmezés szerint fájlba menti a memóriáját és terminál.
+Néhány `signal` hatására a folyamat alapértelmezés szerint fájlba menti a memóriáját és terminál.
 
 Ezáltal utólag debuggerben vizsgálható a belső állapot.
 
@@ -293,6 +294,7 @@ Ezáltal utólag debuggerben vizsgálható a belső állapot.
 				<section data-markdown style="text-align: left;"> <script type="text/template">
 #### Core dump generálás hibánál
 ```
+#!/bin/sh
 # ulimit -c unlimited
 
 cd $prefix/var &&
