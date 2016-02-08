@@ -173,10 +173,12 @@ welf (kvformat, linux-audit)
 
     ...
 ```
-Frissebb csomagok elérhetők az alábbi [OBS repóból](https://build.opensuse.org/project/show/home:laszlo_budai:syslog-ng):
+Frissebb csomagok elérhetők az alábbi [OBS repókból](https://build.opensuse.org/project/show/home:laszlo_budai:syslog-ng):
 ```
 https://build.opensuse.org/project/show  
 /home:laszlo_budai:syslog-ng
+
+/home:czanik:syslog-ng37
 ```
 				</script> </section>
 
@@ -393,15 +395,19 @@ Signed-off-by: bkil-syslogng <tamas.nagy@example.com>
 				<section data-markdown style="text-align: left;"> <script type="text/template">
 #### git commit & push
 ```
+git commit --all --signoff
 git push origin f/fix-tls-sigsegv
 ```
-TODO: img
 				</script> </section>
 
 				<section data-markdown style="text-align: left;"> <script type="text/template">
 #### GitHub pull request (PR) ->
-TODO: img
+<img class="stretch" src="img/github-cr-pr-1.png" />
 				</script> </section>
+
+				<section>
+<img class="stretch" src="img/github-cr-pr-2.png" />
+				</section>
 
 				<section data-markdown style="text-align: left;"> <script type="text/template">
 #### GitHub code review folyamat ->
@@ -409,7 +415,7 @@ TODO: img
 				</script> </section>
 
 				<section>
-<img class="stretch" src="img/pr-705-1-conv.png" />
+<img class="stretch" src="img/pr-705-1-conv-z.png" />
 				</section>
 
 				<section>
@@ -449,11 +455,6 @@ TODO: img
 * copyright deklarációk
 * unit tesztek
 * funkcionális tesztek
-				</script> </section>
-
-				<section data-markdown style="text-align: left;"> <script type="text/template">
-#### Release: openSUSE Build Service
-TODO: img
 				</script> </section>
 
 				<section data-markdown style="text-align: left;"> <script type="text/template">
