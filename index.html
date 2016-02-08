@@ -194,20 +194,15 @@ make install
 
 				<section data-markdown style="text-align: left;"> <script type="text/template">
 #### Egy régi változat beüzemelése (git) ->
-				</script> </section>
-
-				<section>
-<img class="stretch" src="img/gitk-history.png" />
-				</section>
-
-				<section data-markdown style="text-align: left;"> <script type="text/template">
-#### Egy régi változat beüzemelése
-
 ```
 git checkout \
  5205a763878e961ababcd2bd9e8562efaa3a7a8d
 ```
 				</script> </section>
+
+				<section>
+<img class="stretch" src="img/gitk-history.png" />
+				</section>
 
 				<section data-markdown style="text-align: left;"> <script type="text/template">
 #### Előidézés: ~/syslog-ng.tls-sigsegv.conf
@@ -247,7 +242,11 @@ nc -zvv localhost 2222
 
 > Segmentation fault (core dumped)
 
-`dmesg`
+`dmesg` TODO
+```
+[232140.562888] syslog-ng[1011]: segfault at 0 ip 00007efc9fd7e160 \
+ sp 00007ffe296e5690 error 4 in libafmongodb.so[7efc9fd5f000+8b000]
+```
 				</script> </section>
 
 				<section data-markdown style="text-align: left;"> <script type="text/template">
@@ -271,23 +270,19 @@ Egyéb általános kérdés:
 
 				<section data-markdown style="text-align: left;"> <script type="text/template">
 #### GitHub fork, feature branch alapú fejlesztés ->
-				</script> </section>
-
-				<section>
-<img class="stretch" src="img/github-fork.png" />
-				</section>
-
-				<section data-markdown style="text-align: left;"> <script type="text/template">
-#### GitHub push beállítások
-
 https://help.github.com/articles/generating-an-ssh-key/
 
 ```
 ssh-keygen # -f ~/.ssh/id_rsa_github
 cat ~/.ssh/id_rsa.pub
 ssh -T git@github.com
+...
 ```
 				</script> </section>
+
+				<section>
+<img class="stretch" src="img/github-fork.png" />
+				</section>
 
 				<section>
 <img class="stretch" src="img/github-settings-url.png" />
