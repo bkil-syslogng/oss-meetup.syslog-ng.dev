@@ -43,13 +43,20 @@
 				<section data-markdown style="text-align: left;"> <script type="text/template">
 * wifi (LAN): syslog-ng @ Open Source Meetup 1/2
 * GnuPG: <img src="img/bkil-64.png" /> [...] F2D8 C3CE D372 836D
-* wifi (WAN): ???
 
 Mindenki vegyen elő papírt, tollat  
 vagy fájlt jegyzeteléshez!
 
 Kérdések a végén & szünetben
 				</script> </section>
+
+				<section data-markdown style="text-align: left;"> <script type="text/template">
+#### Miről szól az előadás?
+* hiba bejelentése
+* hiba kinyomozása
+* javítás beküldése
+				</script> </section>
+
 
 				<section data-markdown style="text-align: left;"> <script type="text/template">
 #### wifi
@@ -64,23 +71,11 @@ Kérdések a végén & szünetben
 				</script> </section>
 
 				<section data-markdown style="text-align: left;"> <script type="text/template">
-#### Mi az (esemény) naplózás?
-
-Főleg szöveges üzenetsorok időbélyegzővel.
-
-A program a kimenetétől független csatornán lehetséges kóros eseményre hívja fel a figyelmet.
-
-Visszakereshetőség, tartósság
-
-`TODO`
-				</script> </section>
-
-				<section data-markdown style="text-align: left;"> <script type="text/template">
 #### Mi a syslog-ng?
 
 https://github.com/balabit/syslog-ng
 
-1998 óta töretlenül felfelé ívelő, pezsgő fejlesztői bázissal rendelkező alternatív GPL/LGPL naplózó rendszer.
+1998 óta töretlenül felfelé ívelő alternatív GPL/LGPL naplózó rendszer (lásd még: journald, rsyslog).
 
 Erősségei többek között az agilitás, a moduláris felépítés, a teljesítményre fektetett hangsúly, gazdag szűrési, üzenetelemzési és transzformációs képességek és széles körű platformtámogatás.
 				</script> </section>
@@ -104,7 +99,7 @@ Komponensek fejleszthetők rengeteg nyelven:
 				</script> </section>
 
 				<section data-markdown style="text-align: left;"> <script type="text/template">
-#### Néhány modul (csak a lista hossza miatt)
+#### Logók
 
 Forrás & cél:
 file/pipe
@@ -177,6 +172,11 @@ welf (kvformat, linux-audit)
 
     ...
 ```
+Frissebb csomagok elérhetők az alábbi [Syslog-NG OBS](https://build.opensuse.org/project/show/home:laszlo_budai:syslog-ng):
+```
+https://build.opensuse.org/project/show  
+/home:laszlo_budai:syslog-ng
+```
 				</script> </section>
 
 				<section data-markdown style="text-align: left;"> <script type="text/template">
@@ -193,38 +193,7 @@ make install
 				</script> </section>
 
 				<section data-markdown style="text-align: left;"> <script type="text/template">
-#### syslog-ng.conf
-
-Rengeteg példa a csomagban és a honlapon is, pl.
-debian/syslog-ng.conf
-
-```
-@version: 3.7
-source      in_file  { internal();
-                       file("input.log" );    };
-destination out_file { file("output.log");    };
-log                  { source(in_file);
-                       destination(out_file); };
-```
-				</script> </section>
-
-				<section data-markdown style="text-align: left;"> <script type="text/template">
-#### Használat
-
-```
-$prefix/sbin/syslog-ng \
- --cfgfile ~/syslog-ng.conf
-```
-				</script> </section>
-
-				<section data-markdown style="text-align: left;"> <script type="text/template">
-#### Hibák: C nyelv
-
-gcc -O3 -std=c90 -g -W -Wall -Wextra -Wshadow -Wdouble-promotion -Wformat=2 -Wcast-align -Wbad-function-cast -Wmissing-prototypes -Wmissing-declarations -Winline -Wnested-externs -Wcast-qual -Wwrite-strings -Wfloat-equal -Wabi -Wstack-protector -Waggregate-return -Winvalid-pch -Wmissing-format-attribute -Wdeprecated-declarations -Woverflow -Wmissing-field-initializers -Wunused-parameter -Wvariadic-macros -Wpointer-arith -Wimplicit-function-declaration -Wpedantic -Wstrict-prototypes -Wredundant-decls -Wlong-long -Wconversion -Wsign-conversion -Wswitch-default -Wundef -Wstrict-overflow=2 -Werror
-				</script> </section>
-
-				<section data-markdown style="text-align: left;"> <script type="text/template">
-#### git történet
+#### Egy régi változat beüzemelése (git) ->
 				</script> </section>
 
 				<section>
@@ -244,48 +213,23 @@ git checkout \
 #### Előidézés: ~/syslog-ng.tls-sigsegv.conf
 
 ```
-@version: 3.7
+@version: 3.8
 
-source local-tls { 
+source s_local_tls { 
  syslog( ip(127.0.0.1) port(2222)
          transport("tls")
          tls( key-file("") cert-file("") ) ); };
 
-destination messages { file("messages"); };
+destination d_file { file("output.log"); };
 
-log { source(local-tls);
-      destination(messages); };
+log { source(s_local_tls);
+      destination(d_file); };
 ```
 				</script> </section>
 
 				<section data-markdown style="text-align: left;"> <script type="text/template">
 #### Előidézés: bemenet
 
-```
-$prefix/sbin/syslog-ng --foreground \
- --cfgfile ~/syslog-ng.tls-sigsegv.conf
-```
-```
-nc -zvv localhost 2222
-```
-
-> Segmentation fault (core dumped)
-
-`dmesg`
-				</script> </section>
-
-				<section data-markdown style="text-align: left;"> <script type="text/template">
-#### Mi az a "core dump"?
-
-Néhány `signal` hatására a folyamat alapértelmezés szerint fájlba menti a memóriáját és terminál.
-
-Ezáltal utólag debuggerben vizsgálható a belső állapot.
-
-`man core`
-				</script> </section>
-
-				<section data-markdown style="text-align: left;"> <script type="text/template">
-#### Core dump generálás hibánál
 ```
 #!/bin/sh
 # ulimit -c unlimited
@@ -296,27 +240,29 @@ cd $prefix/var &&
  --cfgfile ~/syslog-ng.tls-sigsegv.conf \
  --verbose --debug --trace --stderr --enable-core
 ```
-				</script> </section>
 
-				<section data-markdown style="text-align: left;"> <script type="text/template">
-#### Core dump futás közben
+```
+nc -zvv localhost 2222
+```
 
-gdb: `gcore`
+> Segmentation fault (core dumped)
 
-vagy
-
-`killall -ABRT syslog-ng`
-
+`dmesg`
 				</script> </section>
 
 				<section data-markdown style="text-align: left;"> <script type="text/template">
 #### Hibabejelentés
 
 https://github.com/balabit/syslog-ng/issues/new
-				</script> </section>
 
-				<section data-markdown style="text-align: left;"> <script type="text/template">
-#### Hiba életciklus és priorizálás - waffle.io
+* verzió
+* input
+* core dump
+* egyéb körülmények
+
+Egyéb általános kérdés:
+* http://lists.balabit.hu/mailman/listinfo/syslog-ng
+
 				</script> </section>
 
 				<section>
@@ -324,7 +270,7 @@ https://github.com/balabit/syslog-ng/issues/new
 				</section>
 
 				<section data-markdown style="text-align: left;"> <script type="text/template">
-#### GitHub fork
+#### GitHub fork, feature branch alapú fejlesztés ->
 				</script> </section>
 
 				<section>
@@ -361,34 +307,17 @@ ssh -T git@github.com
 ```
 git clone git@github.com:bkil/syslog-ng.git
 ```
-				</script> </section>
 
-				<section data-markdown style="text-align: left;"> <script type="text/template">
-#### Feature branch alapú fejlesztés
-				</script> </section>
-
-				<section data-markdown style="text-align: left;"> <script type="text/template">
-#### Feature branch létrehozás
-
+Ha nem GUI-ból csináljuk:
 ```
 git checkout \
  -b f/fix-tls-sigsegv \
  5205...
-
-# master
 ```
 				</script> </section>
 
-				<section>
-<img class="stretch" src="img/github-create-branch.png" />
-				</section>
-
 				<section data-markdown style="text-align: left;"> <script type="text/template">
 #### Korszerű C fejlesztés IDE segítségével
-				</script> </section>
-
-				<section data-markdown style="text-align: left;"> <script type="text/template">
-#### TDD
 				</script> </section>
 
 				<section data-markdown style="text-align: left;"> <script type="text/template">
@@ -409,10 +338,6 @@ git checkout \
 
 				<section data-markdown style="text-align: left;"> <script type="text/template">
 #### Okfeltárás - híváslánc
-				</script> </section>
-
-				<section data-markdown style="text-align: left;"> <script type="text/template">
-#### Hatás vizsgálat - biztonság
 				</script> </section>
 
 				<section data-markdown style="text-align: left;"> <script type="text/template">
@@ -460,10 +385,13 @@ Signed-off-by: bkil-syslogng <tamas.nagy@example.com>
 
 				<section data-markdown style="text-align: left;"> <script type="text/template">
 #### git push
+```
+git push origin f/fix-tls-sigsegv
+```
 				</script> </section>
 
 				<section data-markdown style="text-align: left;"> <script type="text/template">
-#### GitHub pull request (PR) / GitLab merge request
+#### GitHub pull request (PR)
 				</script> </section>
 
 				<section>
@@ -471,7 +399,7 @@ Signed-off-by: bkil-syslogng <tamas.nagy@example.com>
 				</section>
 
 				<section data-markdown style="text-align: left;"> <script type="text/template">
-#### GitHub code review folyamat
+#### GitHub code review folyamat ->
 				</script> </section>
 
 				<section>
@@ -485,10 +413,6 @@ Signed-off-by: bkil-syslogng <tamas.nagy@example.com>
 				<section>
 <img class="stretch" src="img/pr-705-4-line-comment.png" />
 				</section>
-
-				<section data-markdown style="text-align: left;"> <script type="text/template">
-#### Kiegészítő commitok
-				</script> </section>
 
 				<section>
 <img class="stretch" src="img/pr-705-2-commits.png" />
@@ -522,43 +446,7 @@ Signed-off-by: bkil-syslogng <tamas.nagy@example.com>
 				</script> </section>
 
 				<section data-markdown style="text-align: left;"> <script type="text/template">
-#### Valgrind
-
-```
-export MALLOC_CHECK_=1 #3
-export G_SLICE=always-malloc
-valgrind --leak-check=full --track-origins=yes -v \
- $prefix/sbin/syslog-ng -Fvedt
-```
-				</script> </section>
-
-				<section data-markdown style="text-align: left;"> <script type="text/template">
-#### Merge
-				</script> </section>
-
-				<section data-markdown style="text-align: left;"> <script type="text/template">
-#### További belső folyamatok és minőségbiztosítás
-				</script> </section>
-
-				<section data-markdown style="text-align: left;"> <script type="text/template">
 #### Release: openSUSE Build Service
-				</script> </section>
-
-				<section data-markdown style="text-align: left;"> <script type="text/template">
-#### Nyílt forrású kedvenceink még
-
-* Jenkins
-* Docker
-* gitlab
-* Raspberry Pi
-* ...
-				</script> </section>
-
-				<section data-markdown style="text-align: left;"> <script type="text/template">
-#### Probléma esetén
-
-* GitHub issue vagy
-* http://lists.balabit.hu/mailman/listinfo/syslog-ng
 				</script> </section>
 
 				<section data-markdown style="text-align: left;"> <script type="text/template">
@@ -584,11 +472,8 @@ valgrind --leak-check=full --track-origins=yes -v \
 
 * https://www.github.com/bkil-syslogng/oss-meetup.syslog-ng.dev
 
-wifi (LAN):
-* syslog-ng @ Open Source Meetup 1/2
-
-GnuPG: <img src="img/bkil-64.png" />
-* [...] F2D8 C3CE D372 836D
+* wifi (LAN): syslog-ng @ Open Source Meetup 1/2
+* GnuPG: <img src="img/bkil-64.png" /> [...] F2D8 C3CE D372 836D
 				</script> </section>
 
 			</div>
