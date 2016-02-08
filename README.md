@@ -5,4 +5,4 @@ https://bkil-syslogng.github.io/oss-meetup.syslog-ng.dev
 
 Improvements are welcome:
 * GitHub issues
-* Pull Requests to branch `gh-pages`
+* Pull Requests to branch `gh-pages` for `index.html`
