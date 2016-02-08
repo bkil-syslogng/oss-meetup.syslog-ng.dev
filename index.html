@@ -206,10 +206,10 @@ git checkout \
 				</section>
 
 				<section data-markdown style="text-align: left;"> <script type="text/template">
-#### Előidézés: ~/syslog-ng.tls-sigsegv.conf
+#### Előidézés: ~/tls-sigsegv.conf
 
 ```
-@version: 3.8
+@version: 3.7
 
 source s_local_tls { 
  syslog( ip(127.0.0.1) port(2222)
@@ -227,26 +227,27 @@ log { source(s_local_tls);
 #### Előidézés: bemenet
 
 ```
-#!/bin/sh
-# ulimit -c unlimited
-
 cd $prefix/var &&
-
 ../sbin/syslog-ng --foreground \
- --cfgfile ~/syslog-ng.tls-sigsegv.conf \
+ --cfgfile ~/tls-sigsegv.conf \
  --verbose --debug --trace --stderr --enable-core
+# ulimit -c unlimited
 ```
 
 ```
 nc -zvv localhost 2222
 ```
-
-> Segmentation fault (core dumped)
-
-`dmesg` TODO
 ```
-[232140.562888] syslog-ng[1011]: segfault at 0 ip 00007efc9fd7e160 \
- sp 00007ffe296e5690 error 4 in libafmongodb.so[7efc9fd5f000+8b000]
+[2016-02-08T21:12:55.458776] Error opening TLS file; filename='', error='No such file or directory (2)'
+[2016-02-08T21:12:55.458829] Error opening TLS file; filename='', error='No such file or directory (2)'
+[2016-02-08T21:12:55.458885] Error setting up TLS session context; tls_error='SSL routines:SSL_CTX_check_private_key:no certificate assigned'
+Segmentation fault (core dumped)
+```
+
+`dmesg`
+```
+[124757.086079] syslog-ng[29563]: segfault at 4 ip
+00007fdfb9036e7c sp 00007ffd755bbef0 error 4 in libsyslog-ng-3.7.so.0.0.0[7fdfb8fc6000+c5000]
 ```
 				</script> </section>
 
@@ -313,34 +314,38 @@ git checkout \
 				</script> </section>
 
 				<section data-markdown style="text-align: left;"> <script type="text/template">
-#### Korszerű C fejlesztés IDE segítségével
-TODO: img
-				</script> </section>
-
-				<section data-markdown style="text-align: left;"> <script type="text/template">
 #### Teszteset létrehozása
 TODO: img
 				</script> </section>
 
-				<section data-markdown style="text-align: left;"> <script type="text/template">
-#### Core dump analízis IDE alól
-TODO: img
-				</script> </section>
+				<section>
+<img class="stretch" src="img/eclipse-post-mortem.png" />
+				</section>
+
+				<section>
+<img class="stretch" src="img/eclipse-stack-1.png" />
+				</section>
 
 				<section data-markdown style="text-align: left;"> <script type="text/template">
-#### Okfeltárás - változók
-TODO: img
+#### Okfeltárás - környezet, híváslánc
+<img class="stretch" src="img/eclipse-stack-2.png" />
 				</script> </section>
 
-				<section data-markdown style="text-align: left;"> <script type="text/template">
-#### Okfeltárás - környezet
-TODO: img
-				</script> </section>
+				<section>
+<img class="stretch" src="img/eclipse-stack-3.png" />
+				</section>
 
-				<section data-markdown style="text-align: left;"> <script type="text/template">
-#### Okfeltárás - híváslánc
-TODO: img
-				</script> </section>
+				<section data>
+<img class="stretch" src="img/eclipse-stack-4.png" />
+				</section>
+
+				<section>
+<img class="stretch" src="img/eclipse-stack-5.png" />
+				</section>
+
+				<section>
+<img class="stretch" src="img/eclipse-stack-6.png" />
+				</section>
 
 				<section data-markdown style="text-align: left;"> <script type="text/template">
 #### Javítás
