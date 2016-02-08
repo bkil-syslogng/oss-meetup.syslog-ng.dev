@@ -219,6 +219,7 @@ source s_local_tls {
          tls( key-file("") cert-file("") ) ); };
 
 destination d_file { file("output.log"); };
+# network( "127.0.0.1" port(2222)); };
 
 log { source(s_local_tls);
       destination(d_file); };
@@ -313,11 +314,6 @@ git checkout \
  -b f/fix-tls-sigsegv \
  5205...
 ```
-				</script> </section>
-
-				<section data-markdown style="text-align: left;"> <script type="text/template">
-#### Teszteset létrehozása
-TODO: img
 				</script> </section>
 
 				<section>
